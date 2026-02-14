@@ -39,3 +39,12 @@ I focused on detecting basic attack patterns using both query languages standard
 index="windows" source="WinEventLog:Security" EventCode=4625 
 | stats count by Account_Name, Source_Network_Address 
 | where count > 5
+```
+
+#### 🔵 Microsoft Sentinel (KQL)
+```kql
+SecurityEvent
+| where EventID == 4625
+| summarize FailureCount = count() by Account, IpAddress
+| where FailureCount > 5
+```
