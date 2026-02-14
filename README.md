@@ -48,3 +48,30 @@ SecurityEvent
 | summarize FailureCount = count() by Account, IpAddress
 | where FailureCount > 5
 ```
+
+### Scenario 2: Suspicious Process Execution (Reconnaissance)
+**Objective:** Detect usage of reconnaissance tools like whoami or net user.
+**MITRE ATT&CK:** [T1033 - System Owner/User Discovery](https://attack.mitre.org/techniques/T1033/)
+
+#### 🟣 Splunk (SPL)
+```splunk
+index="windows" source="xml:WinEventLog:Microsoft-Windows-Sysmon/Operational" EventCode=1 
+| where Image like "%whoami.exe" OR Image like "%net.exe"
+| table _time, User, CommandLine, ParentImage
+```
+
+#### 🔵 Microsoft Sentinel (KQL)
+```kql
+Event
+| where Source == "Microsoft-Windows-Sysmon" and EventID == 1
+| extend RenderedDescription = tostring(parse_xml(RenderedDescription).EventData.Data)
+| where RenderedDescription has "whoami.exe"
+| project TimeGenerated, RenderedDescription
+```
+
+#### 📊 Dashboards & Evidence
+
+####💡 Lessons Learned & Business Impact
+- Hybrid Visibility: Operating both SIEMs highlighted the importance of unified logging strategies, especially for compliance (GDPR/NIS2).
+
+- Query Performance: KQL proved highly efficient for cloud-native data, while Splunk offered granular control over parsing local XML logs
