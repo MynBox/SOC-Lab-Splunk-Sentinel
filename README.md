@@ -71,7 +71,8 @@ Event
 
 #### 📊 Dashboards & Evidence
 
-####💡 Lessons Learned & Business Impact
+
+#### 💡 Lessons Learned & Business Impact
 - Hybrid Visibility: Operating both SIEMs highlighted the importance of unified logging strategies, especially for compliance (GDPR/NIS2).
 
 - Query Performance: KQL proved highly efficient for cloud-native data, while Splunk offered granular control over parsing local XML logs
